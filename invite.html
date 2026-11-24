@@ -1,32 +1,614 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wedding Invitation</title>
-  <style>
-    :body { font-family: Georgia, serif; margin: 0; background: #f9f5ef; color: #333; }
-    main { min-height: 100vh; display: grid; place-items: center; padding: 2rem; box-sizing: border-box; }
-    .invite { max-width: 620px; text-align: center; border: 1px solid #b79a58; background: #fff; padding: 3rem 2rem; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
-    h1 { font-size: clamp(2.5rem, 8vw, 5rem); margin: .25em 0; color: #8a6240; }
-    .names { font-size: clamp(1.8rem, 5vw, 3rem); }
-    .details { margin-top: 2rem; line-height: 1.8; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niwanshu & Dr. Ritvika - Wedding Invitation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#FAF4E6',
+                            300: '#E5C789',
+                            400: '#D4AF37',
+                            500: '#C59B27',
+                            600: '#9A771C'
+                        },
+                        blush: {
+                            50: '#FFF5F5',
+                            100: '#FFEAEA',
+                            200: '#FCD5CE',
+                            300: '#F8AD9D'
+                        },
+                        cream: '#FDFBF7'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        script: ['"Great Vibes"', 'cursive'],
+                        sans: ['"Montserrat"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #FDFBF7;
+            color: #333333;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+        /* Keyframe Animations */
+        @keyframes pulseSlow {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.04); opacity: 1; }
+        }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-pulse-slow {
+            animation: pulseSlow 4s ease-in-out infinite;
+        }
+        .animate-spin-slow {
+            animation: spinSlow 35s linear infinite;
+        }
+        /* Golden Glass Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+        .glass-nav {
+            background: rgba(253, 251, 247, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+    </style>
 </head>
-<body>
-  <main>
-    <article class="invite">
-      <p>Together with their families</p>
-      <div class="names"><strong>Aarav</strong> &amp; <strong>Meera</strong></div>
-      <h1>invite you</h1>
-      <p>to celebrate their wedding</p>
-      <div class="details">
-        <strong>Saturday, December 12, 2026</strong><br>
-        <span>at 5:00 PM</span><br>
-        <span>The Garden Courtyard</span><br>
-        <span>Jaipur, Rajasthan</span>
-      </div>
-    </article>
-  </main>
+<body class="relative overflow-x-hidden">
+
+    <!-- Audio Player (Sticky Bottom Right Floating Control) -->
+    <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3">
+        <div id="music-indicator" class="hidden sm:flex items-center gap-1 bg-white/95 backdrop-blur px-3 py-2 rounded-full border border-gold-300 shadow-lg">
+            <span class="w-1 h-3 bg-gold-400 rounded-full animate-pulse"></span>
+            <span class="w-1 h-5 bg-gold-500 rounded-full animate-pulse delay-100"></span>
+            <span class="w-1 h-2 bg-gold-400 rounded-full animate-pulse delay-200"></span>
+            <span class="text-xs font-serif italic text-gold-600 ml-1">Romantic Sitar & Violin</span>
+        </div>
+        <button id="music-btn" onclick="toggleAudio()" aria-label="Toggle Audio" class="w-12 h-12 rounded-full bg-gold-400 text-white flex items-center justify-center shadow-xl hover:bg-gold-500 transition-all transform hover:scale-105 active:scale-95 border-2 border-white">
+            <i id="music-icon" data-lucide="music" class="w-5 h-5"></i>
+        </button>
+    </div>
+
+    <!-- Background Audio Element -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-background-music-114144.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#hero" class="font-script text-2xl md:text-3xl text-gold-600 font-bold tracking-wide">N & R</a>
+            
+            <div class="hidden md:flex items-center space-x-8 font-serif text-sm tracking-widest uppercase text-gray-700 font-medium">
+                <a href="#hero" class="hover:text-gold-500 transition-colors">Home</a>
+                <a href="#story" class="hover:text-gold-500 transition-colors">Our Story</a>
+                <a href="#events" class="hover:text-gold-500 transition-colors">Events</a>
+                <a href="#gallery" class="hover:text-gold-500 transition-colors">Gallery</a>
+                <a href="#venue" class="hover:text-gold-500 transition-colors">Venue</a>
+                <a href="#rsvp" class="hover:text-gold-500 transition-colors">RSVP</a>
+            </div>
+
+            <a href="#rsvp" class="px-4 py-2 text-xs md:text-sm font-medium tracking-wider uppercase bg-gold-400 text-white rounded-full hover:bg-gold-500 shadow-sm transition-all">
+                RSVP Now
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 pb-12 px-4 overflow-hidden">
+        <!-- Background Decorative Mandala SVGs -->
+        <div class="absolute -top-24 -left-24 opacity-15 pointer-events-none animate-spin-slow">
+            <svg width="400" height="400" viewBox="0 0 100 100" fill="currentColor" class="text-gold-400">
+                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="0.5" fill="none"/>
+                <path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18" stroke="currentColor" stroke-width="0.3"/>
+                <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="0.5" fill="none"/>
+            </svg>
+        </div>
+        <div class="absolute -bottom-24 -right-24 opacity-15 pointer-events-none animate-spin-slow">
+            <svg width="400" height="400" viewBox="0 0 100 100" fill="currentColor" class="text-gold-400">
+                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="0.5" fill="none"/>
+                <path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M18 82 L82 18" stroke="currentColor" stroke-width="0.3"/>
+                <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="0.5" fill="none"/>
+            </svg>
+        </div>
+
+        <div class="max-w-4xl w-full text-center z-10 space-y-6">
+            <p class="font-serif tracking-[0.3em] uppercase text-gold-600 text-sm md:text-base font-semibold">Together with their families</p>
+            
+            <h1 class="font-script text-5xl sm:text-7xl md:text-8xl text-gray-800 leading-tight">
+                Niwanshu <span class="text-gold-400 text-4xl sm:text-6xl">&</span> Dr. Ritvika
+            </h1>
+            
+            <p class="font-serif italic text-gray-600 text-lg md:text-2xl max-w-2xl mx-auto">
+                Request the pleasure of your company as they celebrate their union of love, commitment, and new beginnings.
+            </p>
+
+            <!-- Main Couple Portrait Frame -->
+            <div class="relative mx-auto my-8 w-64 h-80 sm:w-80 sm:h-96 rounded-t-full rounded-b-3xl p-3 bg-gradient-to-b from-gold-300 via-gold-100 to-white shadow-2xl">
+                <div class="w-full h-full rounded-t-full rounded-b-2xl overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80" 
+                         alt="Niwanshu and Dr Ritvika" 
+                         class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                         onerror="this.src='https://placehold.co/600x800/FAF4E6/9A771C?text=Niwanshu+%26+Dr.+Ritvika'"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                </div>
+            </div>
+
+            <!-- Date Banner -->
+            <div class="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-gold-300 bg-white/70 backdrop-blur shadow-sm">
+                <i data-lucide="calendar" class="w-5 h-5 text-gold-500"></i>
+                <span class="font-serif text-xl sm:text-2xl text-gray-800 font-semibold tracking-wider">DECEMBER 15, 2026</span>
+            </div>
+
+            <!-- Live Countdown Timer -->
+            <div class="pt-6">
+                <p class="font-serif text-xs uppercase tracking-widest text-gold-600 mb-4 font-semibold">Counting Down To The Celebration</p>
+                <div class="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto">
+                    <div class="glass-card rounded-2xl p-3 text-center shadow-sm">
+                        <span id="days" class="block font-serif text-2xl sm:text-4xl font-bold text-gray-800">00</span>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 font-medium">Days</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-3 text-center shadow-sm">
+                        <span id="hours" class="block font-serif text-2xl sm:text-4xl font-bold text-gray-800">00</span>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 font-medium">Hours</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-3 text-center shadow-sm">
+                        <span id="minutes" class="block font-serif text-2xl sm:text-4xl font-bold text-gray-800">00</span>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 font-medium">Mins</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-3 text-center shadow-sm">
+                        <span id="seconds" class="block font-serif text-2xl sm:text-4xl font-bold text-gray-800">00</span>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 font-medium">Secs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section id="story" class="py-20 px-4 bg-blush-50/50">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Our Story</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-12">The Beautiful Journey</h2>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-gray-800">First Spark</h3>
+                    <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">Summer 2022</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">Two distinct paths crossed gracefully, sparking conversations that lasted for hours into the evening.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600">
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-gray-800">The Proposal</h3>
+                    <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">Autumn 2025</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">Amidst nature's quiet retreat, Niwanshu popped the question and Dr. Ritvika happily said yes!</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600">
+                        <i data-lucide="gem" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-gray-800">The Big Day</h3>
+                    <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">December 2026</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">Beginning a life-long journey of compassion, joy, and togetherness surrounded by our loved ones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Itinerary Section -->
+    <section id="events" class="py-20 px-4">
+        <div class="max-w-5xl mx-auto text-center">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Celebrate With Us</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-12">Event Itinerary</h2>
+
+            <div class="grid md:grid-cols-2 gap-8 text-left">
+                <!-- Haldi & Mehendi -->
+                <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-100/50 rounded-bl-full -z-0"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold uppercase tracking-wider rounded-full">Day 1 Morning</span>
+                            <span class="text-xs font-semibold text-gray-500">10:00 AM ONWARDS</span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-gray-800">Haldi & Mehendi Ceremony</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">A sunlit gathering of yellow blooms, aromatic turmeric paste, traditional henna, and joyful music.</p>
+                        <div class="pt-2 border-t border-gray-100 text-xs text-gray-600 space-y-1">
+                            <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-gold-500"></i> Royal Heritage Courtyard</p>
+                            <p class="flex items-center gap-2"><i data-lucide="shirt" class="w-4 h-4 text-gold-500"></i> Dress Code: Shades of Yellow & Floral</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sangeet Night -->
+                <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-purple-100/50 rounded-bl-full -z-0"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold uppercase tracking-wider rounded-full">Day 1 Evening</span>
+                            <span class="text-xs font-semibold text-gray-500">07:00 PM ONWARDS</span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-gray-800">Sangeet & Musical Evening</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">An energetic evening featuring dance performances, live music, and non-stop celebration.</p>
+                        <div class="pt-2 border-t border-gray-100 text-xs text-gray-600 space-y-1">
+                            <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-gold-500"></i> Grand Palace Ballroom</p>
+                            <p class="flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-gold-500"></i> Dress Code: Indo-Western & Evening Glam</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wedding Ceremony -->
+                <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md border-2 border-gold-300">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-red-100/50 rounded-bl-full -z-0"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold uppercase tracking-wider rounded-full">Main Event - Day 2</span>
+                            <span class="text-xs font-semibold text-gray-500">05:00 PM ONWARDS</span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-gray-800">Wedding Ceremony (Pheras)</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Witness the sacred wedding vows under the mandap as Niwanshu and Dr. Ritvika unite forever.</p>
+                        <div class="pt-2 border-t border-gray-100 text-xs text-gray-600 space-y-1">
+                            <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-gold-500"></i> Main Palace Lawns</p>
+                            <p class="flex items-center gap-2"><i data-lucide="crown" class="w-4 h-4 text-gold-500"></i> Dress Code: Royal Indian Ethnic</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grand Reception -->
+                <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-amber-100/50 rounded-bl-full -z-0"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold uppercase tracking-wider rounded-full">Day 2 Night</span>
+                            <span class="text-xs font-semibold text-gray-500">08:00 PM ONWARDS</span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-gray-800">Grand Reception & Feast</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Join us for a lavish dinner buffet, cake cutting ceremony, and memorable photo sessions with the newlyweds.</p>
+                        <div class="pt-2 border-t border-gray-100 text-xs text-gray-600 space-y-1">
+                            <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-gold-500"></i> Crystal Banquet Hall</p>
+                            <p class="flex items-center gap-2"><i data-lucide="wine" class="w-4 h-4 text-gold-500"></i> Dress Code: Black Tie / Formal Evening Wear</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section id="gallery" class="py-20 px-4 bg-blush-50/40">
+        <div class="max-w-6xl mx-auto text-center">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Precious Moments</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-12">Photo Gallery</h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+1'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+2'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+3'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=1000&q=80')">
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+4'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white hover:text-gold-300">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Enlarged gallery photo" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl">
+    </div>
+
+    <!-- Venue & Location Section -->
+    <section id="venue" class="py-20 px-4">
+        <div class="max-w-5xl mx-auto text-center space-y-8">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Destination</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800">Wedding Venue</h2>
+
+            <div class="glass-card rounded-3xl p-6 md:p-10 text-left grid md:grid-cols-2 gap-8 items-center shadow-lg">
+                <div class="space-y-4">
+                    <div class="inline-block px-3 py-1 bg-gold-100 text-gold-600 rounded-full text-xs font-semibold uppercase tracking-wider">
+                        The Grand Venue
+                    </div>
+                    <h3 class="font-serif text-3xl font-bold text-gray-800">The Royal Heritage Palace</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Palace Road, Near Lake Garden, Jaipur, Rajasthan - 302001
+                    </p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Accommodations and valet parking are arranged on-site for all our guests.
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-gold-400 text-white text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-gold-500 transition-all shadow-md">
+                            <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
+                        </a>
+                        <a href="tel:+919876543210" class="inline-flex items-center gap-2 px-6 py-3 border border-gold-400 text-gold-600 text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-gold-50 transition-all">
+                            <i data-lucide="phone" class="w-4 h-4"></i> Contact Host
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Embedded Map Card -->
+                <div class="w-full h-64 md:h-80 rounded-2xl overflow-hidden border border-gold-200 shadow-inner relative bg-gray-100">
+                    <iframe 
+                        title="Wedding Venue Map"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14234.676643283287!2d75.7872709!3d26.9124336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db40816790d0b%3A0x1c8b329c294d76e0!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin" 
+                        class="w-full h-full border-0" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="py-20 px-4 bg-blush-50/50">
+        <div class="max-w-3xl mx-auto text-center">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Your Presence Matters</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-4">RSVP</h2>
+            <p class="font-serif italic text-gray-600 mb-10">Kindly respond by November 20, 2026 to help us plan smoothly.</p>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-10 text-left shadow-xl relative">
+                <form id="rsvp-form" onsubmit="handleRSVP(event)" class="space-y-6">
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Full Name *</label>
+                            <input type="text" required placeholder="e.g. Dr. Aakash Verma" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Phone / WhatsApp *</label>
+                            <input type="tel" required placeholder="+91 98765 43210" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Will You Attend? *</label>
+                            <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
+                                <option value="yes">Joyfully Accepts (Attending)</option>
+                                <option value="no">Regretfully Declines</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Number of Guests</label>
+                            <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
+                                <option value="1">1 Person</option>
+                                <option value="2">2 Persons</option>
+                                <option value="3">3 Persons</option>
+                                <option value="4">4+ Family</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Dietary Preferences / Warm Notes</label>
+                        <textarea rows="3" placeholder="e.g. Vegetarian, Jain preferences, or warm wishes..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-gold-400 text-white font-serif font-bold tracking-widest uppercase text-sm rounded-xl hover:bg-gold-500 shadow-md transition-all">
+                        Confirm RSVP
+                    </button>
+                </form>
+
+                <!-- Dynamic Confirmation Toast -->
+                <div id="rsvp-success" class="hidden absolute inset-0 bg-white/95 rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-4">
+                    <div class="w-16 h-16 bg-gold-100 rounded-full flex items-center justify-center text-gold-500">
+                        <i data-lucide="heart-handshake" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-3xl font-bold text-gray-800">Thank You!</h3>
+                    <p class="text-sm text-gray-600 max-w-md">Your RSVP has been submitted to Niwanshu & Dr. Ritvika. We look forward to seeing you!</p>
+                    <button onclick="resetRSVP()" class="px-6 py-2 border border-gold-400 text-gold-600 text-xs font-semibold uppercase rounded-full hover:bg-gold-50">
+                        Submit Another Response
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guestbook / Best Wishes Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Blessings & Love</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800">Wishes for the Couple</h2>
+
+            <div class="glass-card rounded-3xl p-6 shadow-md text-left space-y-4">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input id="wish-name" type="text" placeholder="Your Name" class="sm:w-1/3 px-4 py-3 text-sm border rounded-xl outline-none focus:border-gold-400">
+                    <input id="wish-msg" type="text" placeholder="Write a warm message for Niwanshu & Dr. Ritvika..." class="sm:w-2/3 px-4 py-3 text-sm border rounded-xl outline-none focus:border-gold-400">
+                    <button onclick="addWish()" class="px-6 py-3 bg-gold-400 text-white text-xs font-bold uppercase rounded-xl hover:bg-gold-500 transition-all">Send</button>
+                </div>
+
+                <div id="wishes-list" class="space-y-3 pt-4 border-t border-gray-100 max-h-60 overflow-y-auto">
+                    <div class="p-3 bg-white/60 rounded-xl">
+                        <p class="text-xs font-bold text-gray-800">Dr. Sunita & Rajesh Gupta</p>
+                        <p class="text-xs text-gray-600">"Wishing Niwanshu & Dr. Ritvika a wonderful journey of love and laughter ahead! Huge congratulations!"</p>
+                    </div>
+                    <div class="p-3 bg-white/60 rounded-xl">
+                        <p class="text-xs font-bold text-gray-800">Karan & Priya</p>
+                        <p class="text-xs text-gray-600">"So thrilled for both of you! Excited to join in the celebrations!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-cream border-t border-gold-200/50 text-center space-y-4">
+        <p class="font-script text-4xl text-gold-600">Niwanshu & Dr. Ritvika</p>
+        <p class="font-serif text-xs uppercase tracking-widest text-gray-500">#NiwanshuWedsRitvika • December 2026</p>
+        <p class="text-[10px] text-gray-400">Crafted with elegance for your special day.</p>
+    </footer>
+
+    <!-- JavaScript Controls -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Audio Toggle Logic
+        let isPlaying = false;
+        const audio = document.getElementById('bg-audio');
+        const musicBtn = document.getElementById('music-btn');
+        const musicIcon = document.getElementById('music-icon');
+        const musicIndicator = document.getElementById('music-indicator');
+
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.setAttribute('data-lucide', 'music');
+                musicIndicator.classList.add('hidden');
+            } else {
+                audio.play().catch(() => {
+                    console.log('Audio playback interaction needed');
+                });
+                musicIcon.setAttribute('data-lucide', 'pause');
+                musicIndicator.classList.remove('hidden');
+            }
+            isPlaying = !isPlaying;
+            lucide.createIcons();
+        }
+
+        // Live Countdown Logic
+        const weddingDate = new Date('December 15, 2026 17:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = weddingDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = String(days).padStart(2, '0');
+                document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Gallery Lightbox
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.getElementById('lightbox').classList.add('flex');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.getElementById('lightbox').classList.remove('flex');
+        }
+
+        // RSVP Form
+        function handleRSVP(e) {
+            e.preventDefault();
+            document.getElementById('rsvp-success').classList.remove('hidden');
+        }
+
+        function resetRSVP() {
+            document.getElementById('rsvp-form').reset();
+            document.getElementById('rsvp-success').classList.add('hidden');
+        }
+
+        // Add Wish Logic
+        function addWish() {
+            const name = document.getElementById('wish-name').value.trim();
+            const msg = document.getElementById('wish-msg').value.trim();
+
+            if (name && msg) {
+                const wishesContainer = document.getElementById('wishes-list');
+                const newWish = document.createElement('div');
+                newWish.className = 'p-3 bg-white/60 rounded-xl transition-all';
+                newWish.innerHTML = `
+                    <p class="text-xs font-bold text-gray-800">${escapeHtml(name)}</p>
+                    <p class="text-xs text-gray-600">"${escapeHtml(msg)}"</p>
+                `;
+                wishesContainer.prepend(newWish);
+
+                document.getElementById('wish-name').value = '';
+                document.getElementById('wish-msg').value = '';
+            }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+    </script>
 </body>
 </html>
