@@ -4,32 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Niwanshu & Dr. Ritvika - Wedding Invitation</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        gold: {
-                            100: '#FAF4E6',
-                            300: '#E5C789',
-                            400: '#D4AF37',
-                            500: '#C59B27',
-                            600: '#9A771C'
-                        },
-                        blush: {
-                            50: '#FFF5F5',
-                            100: '#FFEAEA',
-                            200: '#FCD5CE',
-                            300: '#F8AD9D'
-                        },
+                        gold: { 100: '#FAF4E6', 300: '#E5C789', 400: '#D4AF37', 500: '#C59B27', 600: '#9A771C' },
+                        blush: { 50: '#FFF5F5', 100: '#FFEAEA', 200: '#FCD5CE', 300: '#F8AD9D' },
                         cream: '#FDFBF7'
                     },
                     fontFamily: {
@@ -42,102 +28,85 @@
         }
     </script>
     <style>
-        html {
-            scroll-behavior: smooth;
+        html { scroll-behavior: smooth; }
+        body { background-color: #FDFBF7; color: #333333; font-family: 'Montserrat', sans-serif; }
+        .font-script { font-family: 'Great Vibes', cursive; }
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
+        @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spinSlow 35s linear infinite; }
+        .glass-card { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.25); }
+        .glass-nav { background: rgba(253, 251, 247, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+
+        /* Couple carousel */
+        #carousel {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem 0;
         }
-        body {
-            background-color: #FDFBF7;
-            color: #333333;
-            font-family: 'Montserrat', sans-serif;
+        #carousel::-webkit-scrollbar { display: none; }
+        .slide {
+            flex: 0 0 auto;
+            width: 220px;
+            scroll-snap-align: center;
+            transform: scale(0.78);
+            opacity: 0.45;
+            filter: grayscale(40%);
+            transition: transform 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
         }
-        .font-script {
-            font-family: 'Great Vibes', cursive;
-        }
-        .font-serif {
-            font-family: 'Cormorant Garamond', serif;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #FDFBF7;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #D4AF37;
-            border-radius: 4px;
-        }
-        /* Keyframe Animations */
-        @keyframes pulseSlow {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.04); opacity: 1; }
-        }
-        @keyframes spinSlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-pulse-slow {
-            animation: pulseSlow 4s ease-in-out infinite;
-        }
-        .animate-spin-slow {
-            animation: spinSlow 35s linear infinite;
-        }
-        /* Golden Glass Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-        }
-        .glass-nav {
-            background: rgba(253, 251, 247, 0.92);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-        }
+        .slide.active { transform: scale(1.05); opacity: 1; filter: none; }
+        @media (min-width: 640px) { .slide { width: 280px; } }
     </style>
 </head>
 <body class="relative overflow-x-hidden">
 
-    <!-- Audio Player (Sticky Bottom Right Floating Control) -->
+
+    <!-- Entry splash: the tap lets the browser play music -->
+    <div id="splash" class="fixed inset-0 z-[60] bg-cream flex flex-col items-center justify-center text-center px-6 space-y-6">
+        <p class="font-serif tracking-[0.3em] uppercase text-gold-600 text-sm font-semibold">Shree Ganeshaya Namah</p>
+        <h1 class="font-script text-5xl sm:text-7xl text-gray-800">Niwanshu <span class="text-gold-400">&</span> Dr. Ritvika</h1>
+        <p class="font-serif italic text-gray-600 text-lg">are getting married</p>
+        <button onclick="enterSite()" class="px-8 py-3 bg-gold-400 text-white font-serif font-bold tracking-widest uppercase text-sm rounded-full hover:bg-gold-500 shadow-lg transition-all">Open Invitation</button>
+    </div>
+
+    <!-- Audio Player -->
     <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3">
         <div id="music-indicator" class="hidden sm:flex items-center gap-1 bg-white/95 backdrop-blur px-3 py-2 rounded-full border border-gold-300 shadow-lg">
             <span class="w-1 h-3 bg-gold-400 rounded-full animate-pulse"></span>
             <span class="w-1 h-5 bg-gold-500 rounded-full animate-pulse delay-100"></span>
             <span class="w-1 h-2 bg-gold-400 rounded-full animate-pulse delay-200"></span>
-            <span class="text-xs font-serif italic text-gold-600 ml-1">Romantic Sitar & Violin</span>
+            <span class="text-xs font-serif italic text-gold-600 ml-1">Ganesh Vandana</span>
         </div>
         <button id="music-btn" onclick="toggleAudio()" aria-label="Toggle Audio" class="w-12 h-12 rounded-full bg-gold-400 text-white flex items-center justify-center shadow-xl hover:bg-gold-500 transition-all transform hover:scale-105 active:scale-95 border-2 border-white">
             <i id="music-icon" data-lucide="music" class="w-5 h-5"></i>
         </button>
     </div>
 
-    <!-- Background Audio Element -->
-    <audio id="bg-audio" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-background-music-114144.mp3" type="audio/mpeg">
-    </audio>
+    <div id="yt-player" style="position:fixed;bottom:0;right:0;width:200px;height:200px;opacity:0;pointer-events:none;z-index:-1;" aria-hidden="true"></div>
 
-    <!-- Navigation Bar -->
+    <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300 px-4 py-3">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <a href="#hero" class="font-script text-2xl md:text-3xl text-gold-600 font-bold tracking-wide">N & R</a>
-            
             <div class="hidden md:flex items-center space-x-8 font-serif text-sm tracking-widest uppercase text-gray-700 font-medium">
                 <a href="#hero" class="hover:text-gold-500 transition-colors">Home</a>
                 <a href="#story" class="hover:text-gold-500 transition-colors">Our Story</a>
+                <a href="#couple" class="hover:text-gold-500 transition-colors">The Couple</a>
                 <a href="#events" class="hover:text-gold-500 transition-colors">Events</a>
                 <a href="#gallery" class="hover:text-gold-500 transition-colors">Gallery</a>
                 <a href="#venue" class="hover:text-gold-500 transition-colors">Venue</a>
-                <a href="#rsvp" class="hover:text-gold-500 transition-colors">RSVP</a>
             </div>
-
-            <a href="#rsvp" class="px-4 py-2 text-xs md:text-sm font-medium tracking-wider uppercase bg-gold-400 text-white rounded-full hover:bg-gold-500 shadow-sm transition-all">
-                RSVP Now
-            </a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 pb-12 px-4 overflow-hidden">
-        <!-- Background Decorative Mandala SVGs -->
         <div class="absolute -top-24 -left-24 opacity-15 pointer-events-none animate-spin-slow">
             <svg width="400" height="400" viewBox="0 0 100 100" fill="currentColor" class="text-gold-400">
                 <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="0.5" fill="none"/>
@@ -155,33 +124,28 @@
 
         <div class="max-w-4xl w-full text-center z-10 space-y-6">
             <p class="font-serif tracking-[0.3em] uppercase text-gold-600 text-sm md:text-base font-semibold">Together with their families</p>
-            
             <h1 class="font-script text-5xl sm:text-7xl md:text-8xl text-gray-800 leading-tight">
                 Niwanshu <span class="text-gold-400 text-4xl sm:text-6xl">&</span> Dr. Ritvika
             </h1>
-            
             <p class="font-serif italic text-gray-600 text-lg md:text-2xl max-w-2xl mx-auto">
                 Request the pleasure of your company as they celebrate their union of love, commitment, and new beginnings.
             </p>
 
-            <!-- Main Couple Portrait Frame -->
             <div class="relative mx-auto my-8 w-64 h-80 sm:w-80 sm:h-96 rounded-t-full rounded-b-3xl p-3 bg-gradient-to-b from-gold-300 via-gold-100 to-white shadow-2xl">
                 <div class="w-full h-full rounded-t-full rounded-b-2xl overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80" 
-                         alt="Niwanshu and Dr Ritvika" 
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80"
+                         alt="Niwanshu and Dr Ritvika"
                          class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                          onerror="this.src='https://placehold.co/600x800/FAF4E6/9A771C?text=Niwanshu+%26+Dr.+Ritvika'"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                 </div>
             </div>
 
-            <!-- Date Banner -->
             <div class="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-gold-300 bg-white/70 backdrop-blur shadow-sm">
                 <i data-lucide="calendar" class="w-5 h-5 text-gold-500"></i>
-                <span class="font-serif text-xl sm:text-2xl text-gray-800 font-semibold tracking-wider">DECEMBER 15, 2026</span>
+                <span class="font-serif text-xl sm:text-2xl text-gray-800 font-semibold tracking-wider">JANUARY 23, 2027</span>
             </div>
 
-            <!-- Live Countdown Timer -->
             <div class="pt-6">
                 <p class="font-serif text-xs uppercase tracking-widest text-gold-600 mb-4 font-semibold">Counting Down To The Celebration</p>
                 <div class="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto">
@@ -206,7 +170,7 @@
         </div>
     </section>
 
-    <!-- Our Story Section -->
+    <!-- Our Story -->
     <section id="story" class="py-20 px-4 bg-blush-50/50">
         <div class="max-w-4xl mx-auto text-center">
             <span class="font-script text-3xl sm:text-4xl text-gold-500">Our Story</span>
@@ -214,43 +178,56 @@
 
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="glass-card p-6 rounded-2xl text-center space-y-3">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600">
-                        <i data-lucide="sparkles" class="w-6 h-6"></i>
-                    </div>
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
                     <h3 class="font-serif text-xl font-bold text-gray-800">First Spark</h3>
                     <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">Summer 2022</p>
                     <p class="text-sm text-gray-600 leading-relaxed">Two distinct paths crossed gracefully, sparking conversations that lasted for hours into the evening.</p>
                 </div>
-
                 <div class="glass-card p-6 rounded-2xl text-center space-y-3">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600">
-                        <i data-lucide="heart" class="w-6 h-6"></i>
-                    </div>
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600"><i data-lucide="heart" class="w-6 h-6"></i></div>
                     <h3 class="font-serif text-xl font-bold text-gray-800">The Proposal</h3>
                     <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">Autumn 2025</p>
                     <p class="text-sm text-gray-600 leading-relaxed">Amidst nature's quiet retreat, Niwanshu popped the question and Dr. Ritvika happily said yes!</p>
                 </div>
-
                 <div class="glass-card p-6 rounded-2xl text-center space-y-3">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600">
-                        <i data-lucide="gem" class="w-6 h-6"></i>
-                    </div>
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gold-100 flex items-center justify-center text-gold-600"><i data-lucide="gem" class="w-6 h-6"></i></div>
                     <h3 class="font-serif text-xl font-bold text-gray-800">The Big Day</h3>
-                    <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">December 2026</p>
+                    <p class="text-xs text-gold-600 font-semibold uppercase tracking-wider">January 2027</p>
                     <p class="text-sm text-gray-600 leading-relaxed">Beginning a life-long journey of compassion, joy, and togetherness surrounded by our loved ones.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Event Itinerary Section -->
-    <section id="events" class="py-20 px-4">
+    <!-- The Couple (carousel) -->
+    <section id="couple" class="py-20 px-0 sm:px-4 overflow-hidden">
+        <div class="max-w-6xl mx-auto text-center">
+            <span class="font-script text-3xl sm:text-4xl text-gold-500">Meet The Couple</span>
+            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-6">The Groom & The Bride</h2>
+
+            <div class="relative">
+                <button onclick="scrollCarousel(-1)" aria-label="Previous" class="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/90 border border-gold-300 text-gold-600 items-center justify-center shadow hover:bg-gold-100">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="scrollCarousel(1)" aria-label="Next" class="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/90 border border-gold-300 text-gold-600 items-center justify-center shadow hover:bg-gold-100">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Slides are generated from the PHOTOS list in the script below -->
+                <div id="carousel"></div>
+            </div>
+
+            <p id="carousel-caption" class="font-serif italic text-gray-600 text-lg mt-2"></p>
+        </div>
+    </section>
+
+    <!-- Events -->
+    <section id="events" class="py-20 px-4 bg-blush-50/40">
         <div class="max-w-5xl mx-auto text-center">
             <span class="font-script text-3xl sm:text-4xl text-gold-500">Celebrate With Us</span>
             <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-12">Event Itinerary</h2>
 
             <div class="grid md:grid-cols-2 gap-8 text-left">
-                <!-- Haldi & Mehendi -->
                 <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-100/50 rounded-bl-full -z-0"></div>
                     <div class="relative z-10 space-y-4">
@@ -267,7 +244,6 @@
                     </div>
                 </div>
 
-                <!-- Sangeet Night -->
                 <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-purple-100/50 rounded-bl-full -z-0"></div>
                     <div class="relative z-10 space-y-4">
@@ -284,7 +260,6 @@
                     </div>
                 </div>
 
-                <!-- Wedding Ceremony -->
                 <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md border-2 border-gold-300">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-red-100/50 rounded-bl-full -z-0"></div>
                     <div class="relative z-10 space-y-4">
@@ -301,7 +276,6 @@
                     </div>
                 </div>
 
-                <!-- Grand Reception -->
                 <div class="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-gold-400 transition-all shadow-md">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-amber-100/50 rounded-bl-full -z-0"></div>
                     <div class="relative z-10 space-y-4">
@@ -321,69 +295,53 @@
         </div>
     </section>
 
-    <!-- Photo Gallery Section -->
-    <section id="gallery" class="py-20 px-4 bg-blush-50/40">
+    <!-- Gallery -->
+    <section id="gallery" class="py-20 px-4">
         <div class="max-w-6xl mx-auto text-center">
             <span class="font-script text-3xl sm:text-4xl text-gold-500">Precious Moments</span>
             <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-12">Photo Gallery</h2>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80')">
-                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+1'">
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Gallery 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+1'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><i data-lucide="zoom-in" class="w-8 h-8"></i></div>
                 </div>
                 <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80')">
-                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+2'">
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80" alt="Gallery 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+2'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><i data-lucide="zoom-in" class="w-8 h-8"></i></div>
                 </div>
                 <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80')">
-                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+3'">
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Gallery 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+3'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><i data-lucide="zoom-in" class="w-8 h-8"></i></div>
                 </div>
                 <div class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=1000&q=80')">
-                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80" alt="Niwanshu & Dr Ritvika Gallery 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+4'">
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                        <i data-lucide="zoom-in" class="w-8 h-8"></i>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80" alt="Gallery 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x600/FAF4E6/9A771C?text=Moment+4'">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><i data-lucide="zoom-in" class="w-8 h-8"></i></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Lightbox Modal -->
+    <!-- Lightbox -->
     <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4" onclick="closeLightbox()">
-        <button class="absolute top-6 right-6 text-white hover:text-gold-300">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
+        <button class="absolute top-6 right-6 text-white hover:text-gold-300"><i data-lucide="x" class="w-8 h-8"></i></button>
         <img id="lightbox-img" src="" alt="Enlarged gallery photo" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl">
     </div>
 
-    <!-- Venue & Location Section -->
-    <section id="venue" class="py-20 px-4">
+    <!-- Venue -->
+    <section id="venue" class="py-20 px-4 bg-blush-50/40">
         <div class="max-w-5xl mx-auto text-center space-y-8">
             <span class="font-script text-3xl sm:text-4xl text-gold-500">Destination</span>
             <h2 class="font-serif text-3xl sm:text-5xl text-gray-800">Wedding Venue</h2>
 
             <div class="glass-card rounded-3xl p-6 md:p-10 text-left grid md:grid-cols-2 gap-8 items-center shadow-lg">
                 <div class="space-y-4">
-                    <div class="inline-block px-3 py-1 bg-gold-100 text-gold-600 rounded-full text-xs font-semibold uppercase tracking-wider">
-                        The Grand Venue
-                    </div>
-                    <h3 class="font-serif text-3xl font-bold text-gray-800">The Royal Heritage Palace</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        Palace Road, Near Lake Garden, Jaipur, Rajasthan - 302001
-                    </p>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        Accommodations and valet parking are arranged on-site for all our guests.
-                    </p>
+                    <div class="inline-block px-3 py-1 bg-gold-100 text-gold-600 rounded-full text-xs font-semibold uppercase tracking-wider">The Grand Venue</div>
+                    <h3 class="font-serif text-3xl font-bold text-gray-800">Khatu Bagh Resort</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">Reengus Road, Khatoo, Khatu Shyamji, Rajasthan - 332602</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">Accommodations and valet parking are arranged on-site for all our guests.</p>
                     <div class="pt-4 flex flex-wrap gap-4">
-                        <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-gold-400 text-white text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-gold-500 transition-all shadow-md">
+                        <a href="https://www.google.com/maps/dir//Khatu+Bagh+Resort,+Reengus+Rd,+Khatoo,+Khatu+Shyamji,+Rajasthan+332602/@27.3708238,75.4204238,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x396ced622f1f75b1:0x93bda4727914406e!2m2!1d75.4204238!2d27.3708238" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-gold-400 text-white text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-gold-500 transition-all shadow-md">
                             <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
                         </a>
                         <a href="tel:+919876543210" class="inline-flex items-center gap-2 px-6 py-3 border border-gold-400 text-gold-600 text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-gold-50 transition-all">
@@ -392,85 +350,17 @@
                     </div>
                 </div>
 
-                <!-- Embedded Map Card -->
                 <div class="w-full h-64 md:h-80 rounded-2xl overflow-hidden border border-gold-200 shadow-inner relative bg-gray-100">
-                    <iframe 
-                        title="Wedding Venue Map"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14234.676643283287!2d75.7872709!3d26.9124336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db40816790d0b%3A0x1c8b329c294d76e0!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin" 
-                        class="w-full h-full border-0" 
-                        allowfullscreen="" 
-                        loading="lazy">
-                    </iframe>
+                    <iframe title="Wedding Venue Map"
+                        src="https://www.google.com/maps?q=Khatu+Bagh+Resort,+Reengus+Rd,+Khatoo,+Khatu+Shyamji,+Rajasthan+332602&output=embed"
+                        class="w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- RSVP Section -->
-    <section id="rsvp" class="py-20 px-4 bg-blush-50/50">
-        <div class="max-w-3xl mx-auto text-center">
-            <span class="font-script text-3xl sm:text-4xl text-gold-500">Your Presence Matters</span>
-            <h2 class="font-serif text-3xl sm:text-5xl text-gray-800 mb-4">RSVP</h2>
-            <p class="font-serif italic text-gray-600 mb-10">Kindly respond by November 20, 2026 to help us plan smoothly.</p>
 
-            <div class="glass-card rounded-3xl p-6 sm:p-10 text-left shadow-xl relative">
-                <form id="rsvp-form" onsubmit="handleRSVP(event)" class="space-y-6">
-                    <div class="grid sm:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Full Name *</label>
-                            <input type="text" required placeholder="e.g. Dr. Aakash Verma" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Phone / WhatsApp *</label>
-                            <input type="tel" required placeholder="+91 98765 43210" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
-                        </div>
-                    </div>
-
-                    <div class="grid sm:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Will You Attend? *</label>
-                            <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
-                                <option value="yes">Joyfully Accepts (Attending)</option>
-                                <option value="no">Regretfully Declines</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Number of Guests</label>
-                            <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80">
-                                <option value="1">1 Person</option>
-                                <option value="2">2 Persons</option>
-                                <option value="3">3 Persons</option>
-                                <option value="4">4+ Family</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">Dietary Preferences / Warm Notes</label>
-                        <textarea rows="3" placeholder="e.g. Vegetarian, Jain preferences, or warm wishes..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-400 focus:ring-2 focus:ring-gold-200 outline-none text-sm bg-white/80"></textarea>
-                    </div>
-
-                    <button type="submit" class="w-full py-4 bg-gold-400 text-white font-serif font-bold tracking-widest uppercase text-sm rounded-xl hover:bg-gold-500 shadow-md transition-all">
-                        Confirm RSVP
-                    </button>
-                </form>
-
-                <!-- Dynamic Confirmation Toast -->
-                <div id="rsvp-success" class="hidden absolute inset-0 bg-white/95 rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-4">
-                    <div class="w-16 h-16 bg-gold-100 rounded-full flex items-center justify-center text-gold-500">
-                        <i data-lucide="heart-handshake" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="font-serif text-3xl font-bold text-gray-800">Thank You!</h3>
-                    <p class="text-sm text-gray-600 max-w-md">Your RSVP has been submitted to Niwanshu & Dr. Ritvika. We look forward to seeing you!</p>
-                    <button onclick="resetRSVP()" class="px-6 py-2 border border-gold-400 text-gold-600 text-xs font-semibold uppercase rounded-full hover:bg-gold-50">
-                        Submit Another Response
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Guestbook / Best Wishes Section -->
+    <!-- Wishes -->
     <section class="py-20 px-4">
         <div class="max-w-4xl mx-auto text-center space-y-8">
             <span class="font-script text-3xl sm:text-4xl text-gold-500">Blessings & Love</span>
@@ -482,7 +372,6 @@
                     <input id="wish-msg" type="text" placeholder="Write a warm message for Niwanshu & Dr. Ritvika..." class="sm:w-2/3 px-4 py-3 text-sm border rounded-xl outline-none focus:border-gold-400">
                     <button onclick="addWish()" class="px-6 py-3 bg-gold-400 text-white text-xs font-bold uppercase rounded-xl hover:bg-gold-500 transition-all">Send</button>
                 </div>
-
                 <div id="wishes-list" class="space-y-3 pt-4 border-t border-gray-100 max-h-60 overflow-y-auto">
                     <div class="p-3 bg-white/60 rounded-xl">
                         <p class="text-xs font-bold text-gray-800">Dr. Sunita & Rajesh Gupta</p>
@@ -497,117 +386,167 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="py-12 bg-cream border-t border-gold-200/50 text-center space-y-4">
         <p class="font-script text-4xl text-gold-600">Niwanshu & Dr. Ritvika</p>
-        <p class="font-serif text-xs uppercase tracking-widest text-gray-500">#NiwanshuWedsRitvika • December 2026</p>
+        <p class="font-serif text-xs uppercase tracking-widest text-gray-500">#NiwanshuWedsRitvika • January 2027</p>
         <p class="text-[10px] text-gray-400">Crafted with elegance for your special day.</p>
     </footer>
 
-    <!-- JavaScript Controls -->
     <script>
-        // Initialize Lucide Icons
+        // ===== Couple photos: replace each `src` with your own image URL / file =====
+        const PHOTOS = [
+            { role: 'Groom', name: 'Niwanshu',      src: 'https://placehold.co/560x700/FAF4E6/9A771C?text=Niwanshu' },
+            { role: 'Bride', name: 'Dr. Ritvika',   src: 'https://placehold.co/560x700/FFEAEA/9A771C?text=Dr.+Ritvika' },
+            { role: 'Groom', name: 'Niwanshu',      src: 'https://placehold.co/560x700/FAF4E6/9A771C?text=Niwanshu+2' },
+            { role: 'Bride', name: 'Dr. Ritvika',   src: 'https://placehold.co/560x700/FFEAEA/9A771C?text=Dr.+Ritvika+2' },
+            { role: 'Groom', name: 'Niwanshu',      src: 'https://placehold.co/560x700/FAF4E6/9A771C?text=Niwanshu+3' },
+            { role: 'Bride', name: 'Dr. Ritvika',   src: 'https://placehold.co/560x700/FFEAEA/9A771C?text=Dr.+Ritvika+3' }
+        ];
+
         lucide.createIcons();
 
-        // Audio Toggle Logic
-        let isPlaying = false;
-        const audio = document.getElementById('bg-audio');
-        const musicBtn = document.getElementById('music-btn');
+        // Background music: YouTube video played through the official embed (audio only, player hidden)
+        const YT_VIDEO_ID = 'qaYqb0i638M';
+        let player = null, playerReady = false, wantPlay = false, isPlaying = false;
         const musicIcon = document.getElementById('music-icon');
         const musicIndicator = document.getElementById('music-indicator');
 
-        function toggleAudio() {
-            if (isPlaying) {
-                audio.pause();
-                musicIcon.setAttribute('data-lucide', 'music');
-                musicIndicator.classList.add('hidden');
-            } else {
-                audio.play().catch(() => {
-                    console.log('Audio playback interaction needed');
-                });
-                musicIcon.setAttribute('data-lucide', 'pause');
-                musicIndicator.classList.remove('hidden');
-            }
-            isPlaying = !isPlaying;
+        const ytTag = document.createElement('script');
+        ytTag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(ytTag);
+
+        window.onYouTubeIframeAPIReady = function () {
+            player = new YT.Player('yt-player', {
+                width: '200', height: '200', videoId: YT_VIDEO_ID,
+                playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: YT_VIDEO_ID, playsinline: 1, origin: location.origin },
+                events: {
+                    onReady: () => { playerReady = true; if (wantPlay) player.playVideo(); },
+                    onError: e => console.warn('YouTube player error', e.data),
+                    onStateChange: e => {
+                        if (e.data === YT.PlayerState.PLAYING) setUI(true);
+                        else if (e.data === YT.PlayerState.PAUSED) setUI(false);
+                    }
+                }
+            });
+        };
+
+        function setUI(playing) {
+            isPlaying = playing;
+            musicIcon.setAttribute('data-lucide', playing ? 'pause' : 'music');
+            musicIndicator.classList.toggle('hidden', !playing);
             lucide.createIcons();
         }
 
-        // Live Countdown Logic
-        const weddingDate = new Date('December 15, 2026 17:00:00').getTime();
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const difference = weddingDate - now;
-
-            if (difference > 0) {
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-                document.getElementById('days').innerText = String(days).padStart(2, '0');
-                document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-                document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-                document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-            }
+        function enterSite() {
+            document.getElementById('splash').classList.add('hidden');
+            wantPlay = true;
+            if (playerReady) player.playVideo();
         }
 
+        function toggleAudio() {
+            if (isPlaying) { wantPlay = false; if (playerReady) player.pauseVideo(); }
+            else { wantPlay = true; if (playerReady) player.playVideo(); }
+        }
+
+        // Countdown
+        const weddingDate = new Date('January 23, 2027 17:00:00').getTime();
+        function updateCountdown() {
+            const difference = weddingDate - Date.now();
+            if (difference > 0) {
+                const d = Math.floor(difference / 86400000);
+                const h = Math.floor((difference % 86400000) / 3600000);
+                const m = Math.floor((difference % 3600000) / 60000);
+                const s = Math.floor((difference % 60000) / 1000);
+                document.getElementById('days').innerText = String(d).padStart(2, '0');
+                document.getElementById('hours').innerText = String(h).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+            }
+        }
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Gallery Lightbox
+        // Couple carousel
+        const carousel = document.getElementById('carousel');
+        const caption = document.getElementById('carousel-caption');
+
+        PHOTOS.forEach((p, i) => {
+            const el = document.createElement('div');
+            el.className = 'slide';
+            el.innerHTML = `
+                <div class="rounded-t-full rounded-b-3xl p-2 bg-gradient-to-b from-gold-300 via-gold-100 to-white shadow-xl">
+                    <div class="aspect-[4/5] rounded-t-full rounded-b-2xl overflow-hidden">
+                        <img src="${p.src}" alt="${p.role} ${p.name}" class="w-full h-full object-cover">
+                    </div>
+                </div>`;
+            el.addEventListener('click', () => el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }));
+            carousel.appendChild(el);
+        });
+
+        const slides = Array.from(carousel.children);
+
+        // Pad both ends so the first/last slide can sit in the center
+        function padCarousel() {
+            const pad = Math.max(0, (carousel.clientWidth - slides[0].offsetWidth) / 2);
+            carousel.style.paddingLeft = pad + 'px';
+            carousel.style.paddingRight = pad + 'px';
+        }
+
+        let current = -1;
+        function updateFocus() {
+            const center = carousel.scrollLeft + carousel.clientWidth / 2;
+            let best = 0, bestDist = Infinity;
+            slides.forEach((s, i) => {
+                const dist = Math.abs(s.offsetLeft + s.offsetWidth / 2 - center);
+                if (dist < bestDist) { bestDist = dist; best = i; }
+            });
+            if (best !== current) {
+                current = best;
+                slides.forEach((s, i) => s.classList.toggle('active', i === best));
+                caption.textContent = `${PHOTOS[best].role} — ${PHOTOS[best].name}`;
+            }
+        }
+
+        function scrollCarousel(dir) {
+            const target = Math.min(slides.length - 1, Math.max(0, current + dir));
+            slides[target].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        carousel.addEventListener('scroll', () => requestAnimationFrame(updateFocus), { passive: true });
+        window.addEventListener('resize', () => { padCarousel(); updateFocus(); });
+        padCarousel();
+        // Start with the 2nd slide (bride) centered so groom + bride are both visible
+        carousel.scrollLeft = slides[1].offsetLeft + slides[1].offsetWidth / 2 - carousel.clientWidth / 2;
+        updateFocus();
+
+        // Gallery lightbox
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
             document.getElementById('lightbox').classList.remove('hidden');
             document.getElementById('lightbox').classList.add('flex');
         }
-
         function closeLightbox() {
             document.getElementById('lightbox').classList.add('hidden');
             document.getElementById('lightbox').classList.remove('flex');
         }
 
-        // RSVP Form
-        function handleRSVP(e) {
-            e.preventDefault();
-            document.getElementById('rsvp-success').classList.remove('hidden');
-        }
-
-        function resetRSVP() {
-            document.getElementById('rsvp-form').reset();
-            document.getElementById('rsvp-success').classList.add('hidden');
-        }
-
-        // Add Wish Logic
+        // Wishes
         function addWish() {
             const name = document.getElementById('wish-name').value.trim();
             const msg = document.getElementById('wish-msg').value.trim();
-
             if (name && msg) {
-                const wishesContainer = document.getElementById('wishes-list');
-                const newWish = document.createElement('div');
-                newWish.className = 'p-3 bg-white/60 rounded-xl transition-all';
-                newWish.innerHTML = `
+                const el = document.createElement('div');
+                el.className = 'p-3 bg-white/60 rounded-xl transition-all';
+                el.innerHTML = `
                     <p class="text-xs font-bold text-gray-800">${escapeHtml(name)}</p>
-                    <p class="text-xs text-gray-600">"${escapeHtml(msg)}"</p>
-                `;
-                wishesContainer.prepend(newWish);
-
+                    <p class="text-xs text-gray-600">"${escapeHtml(msg)}"</p>`;
+                document.getElementById('wishes-list').prepend(el);
                 document.getElementById('wish-name').value = '';
                 document.getElementById('wish-msg').value = '';
             }
         }
-
         function escapeHtml(text) {
-            return text.replace(/[&<>"']/g, function(m) {
-                return {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#039;'
-                }[m];
-            });
+            return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
         }
     </script>
 </body>
